@@ -9,6 +9,17 @@ public class StudentController {
     StudentView view;
     StudentModel model;
 
-   // public StudentController(studentview v, studentmodel m) throws SQLException {
+   public StudentController(StudentView v, StudentModel m) throws SQLException {
+       view = v;
+       model = m;
+       view.exitBtn.setOnAction(e -> Platform.exit());
+       model.establishConnection();
+       model.makeStatement();
+       view.nameslist=FXCollections.observableArrayList(model.SQLStudentQuery());
+
+
+       view.configure();
+
+   }
 
     }

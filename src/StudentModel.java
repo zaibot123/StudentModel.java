@@ -22,13 +22,13 @@ public class StudentModel {
             conn.close();
         }
     }
-    public void makeStatement(Statement Statement) throws SQLException{
-        Statement=Stment;
-        Statement=conn.createStatement();
+    public void makeStatement() throws SQLException{
+
+        Stment=conn.createStatement();
         }
     public ArrayList<String> SQLStudentQuery() throws SQLException{
         ArrayList<String> student = new ArrayList<>();
-        String select="Select Name from Student;";
+        String select="Select StudentName from Student;";
         result=Stment.executeQuery(select);
         while(result!=null  && result.next()){
             String names = result.getString(1);
@@ -40,12 +40,12 @@ public class StudentModel {
         System.out.println("Which student do you wish to find average grade for?");
         Scanner scanner = new Scanner(System.in);
         String studentName = scanner.nextLine();
-        String sql= "SELECT Grades, CourseID FROM CourseRegistration;";
+        String sql= "SELECT Grade, CourseID FROM CourseRegistration;";
         result=Stment.executeQuery(sql);
         while(result!=null && result.next()){
             int grades=result.getInt(1);
             int courses=result.getInt(2);
-            System.out.print(grades+courses);
+            System.out.print(grades+" "+courses);
         }
 }
     public void PstmRetrieveGradeForStudent() throws SQLException {
