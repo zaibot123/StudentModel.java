@@ -36,62 +36,60 @@ public class StudentModel {
         }
         return student;
     }
-    public void RetrieveGradeForStudent() throws SQLException{
-        System.out.println("Which student do you wish to find average grade for?");
-        Scanner scanner = new Scanner(System.in);
-        String studentName = scanner.nextLine();
-        String sql= "SELECT Grade, CourseID FROM CourseRegistration;";
-        result=Stment.executeQuery(sql);
-        while(result!=null && result.next()){
-            int grades=result.getInt(1);
-            int courses=result.getInt(2);
-            System.out.print(grades+" "+courses);
-        }
-}
-    public void PstmRetrieveGradeForStudent() throws SQLException {
-        System.out.println("Which student do you wish to find average grade and courses for?");
-        Scanner scanner = new Scanner(System.in);
-        String studentName = scanner.nextLine();
-        String sql = "SELECT StudentName,CourseName,Grade FROM CourseRegistration WHERE StudentName = ?;";
+
+
+    public ArrayList<StudentInfo> RetrieveGradeForStudent(String StudentName) throws SQLException {
+        ArrayList<StudentInfo> averagegrade=new ArrayList<>();
+        String sql = "SELECT avg(CourseRegistration.Grade) as Average, Student.StudentName FROM Student INNER JOIN CourseRegistration ON CourseRegistration.StudentID=Student.StudentID WHERE StudentName = ?;";
         Preparedstment = conn.prepareStatement(sql);
-        Preparedstment.setString(1, studentName);
+        Preparedstment.setString(1, StudentName);
         result = Preparedstment.executeQuery();
         while (result != null && result.next()) {
-            System.out.println(result.getString(1));
+            double GradeAverage = result.getDouble("Average");
+            System.out.println(GradeAverage);
+            StudentInfo a =new StudentInfo(StudentName, "",GradeAverage);
+            averagegrade.add(a);
         }
+        return averagegrade;
     }
 
-    public ArrayList<StudentInfo> QueryforGrades(String studentName) throws SQLException{
+    public ArrayList<StudentInfo> QueryforGrades(String StudentName) throws SQLException{
             ArrayList<StudentInfo> studentinfolist=new ArrayList<>();
-
-            String sql="SELECT StudentName as name, AVGGrades as grades, CoursesTaken as courses WHERE StudentName= ? ;";
-
+            String sql="SELECT Student.StudentID, Student.StudentName as name, CourseRegistration.Grade, CourseRegistration.CourseID, Course.Semester  FROM Student INNER JOIN CourseRegistration ON CourseRegistration.StudentID=Student.StudentID INNER JOIN Course ON Course.CourseID=CourseRegistration.CourseID WHERE StudentName= ? ;";
             Preparedstment=conn.prepareStatement(sql);
-            Preparedstment.setString(1,studentName);
+            Preparedstment.setString(1,StudentName);
             result =Preparedstment.executeQuery();
 
             while(result!=null && result.next()){
-                String StudentName=result.getString("name");
-                String CoursesTaken=result.getString("courses");
-                double AVGGrade = result.getDouble("grade");
 
-                System.out.println(StudentName+ "har deltaget i " + CoursesTaken + " og har en karakter på " + AVGGrade);
-                StudentInfo s =new StudentInfo(StudentName, CoursesTaken, AVGGrade);
+                String CoursesTaken=result.getString("Semester");
+                double GradeCourse = result.getDouble("Grade");
+                StudentInfo s =new StudentInfo(StudentName, CoursesTaken, GradeCourse);
                 studentinfolist.add(s);
             }
             return studentinfolist;
         }
-}
+
+
+
+
+    }
+
 class StudentInfo{
         String StudentName;
         String CoursesTaken;
-        double AVGGrade;
+        double GradeCourse;
+        double GradeAverage;
+
 
     StudentInfo(String name, String courses,double grade){               //constructor
 
         StudentName=name;
         CoursesTaken=courses;
-        AVGGrade=grade;
+        GradeCourse=grade;
+
+
     }
+
 }
 

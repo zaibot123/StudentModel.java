@@ -13,11 +13,9 @@ public class StudentView {
 
     GridPane startview;
     Label Student;
-    Label Grade;
-    Label Courses;
     Button exitBtn;
+    Button FindGradesCourses;
     Button FindAVG;
-    Button FindCourses;
     ComboBox<String> StudentChoice;
     TextArea TextField;
 
@@ -39,20 +37,22 @@ public class StudentView {
         startview.setPadding(new Insets(20, 20, 20, 20));
         startview.setVgap(5);
         startview.setHgap(1);
-
         Student = new Label("Select Student");
         startview.add(Student, 1, 1);
 
 
         exitBtn = new Button("Exit");
         startview.add(exitBtn, 20, 20);
-        FindAVG = new Button("Find Average Grades");
-        startview.add(FindAVG, 15, 9);
-        FindCourses = new Button("Find Courses");
-        startview.add(FindCourses, 20, 9);
+        FindGradesCourses = new Button("Courses & grades for student");
+        startview.add(FindGradesCourses, 15, 9);
+        FindAVG = new Button("Average grade for student");
+        startview.add(FindAVG, 20, 9);
 
         StudentChoice = new ComboBox<>();
         startview.add(StudentChoice,2,1);
+
+        TextField = new TextArea();
+        startview.add(TextField,1,10,15,10);
     }
     public void configure(){
         StudentChoice.setItems(nameslist);
